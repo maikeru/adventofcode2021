@@ -1,10 +1,11 @@
-package main
+package day_01_1
 
 import (
 	"fmt"
 	"io/ioutil"
-	"strconv"
 	"strings"
+
+	"github.com/maikeru/adventofcode2021/utils"
 )
 
 var depthsTest = [10]int{199,
@@ -39,19 +40,7 @@ func getIncreasedCount(depths []int) int {
 	return increasedCount
 }
 
-func mapStringsToInts(stringArray []string) []int {
-	numArray := make([]int, len(stringArray))
-	for i := range stringArray {
-		num, err := strconv.Atoi(stringArray[i])
-		if err != nil {
-			panic(err)
-		}
-		numArray[i] = num
-	}
-	return numArray
-}
-
-func main() {
+func Run() {
 	fmt.Println(getIncreasedCount(depthsTest[:]))
 
 	depthBytes, err := ioutil.ReadFile("./input-01-1.txt")
@@ -60,7 +49,7 @@ func main() {
 	}
 	depthString := string(depthBytes[:])
 	depthStrings := strings.Split(depthString, "\n")
-	depths := mapStringsToInts(depthStrings)
+	depths := utils.MapStringsToInts(depthStrings)
 
 	fmt.Println(getIncreasedCount(depths))
 }
