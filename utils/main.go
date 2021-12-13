@@ -1,6 +1,10 @@
 package utils
 
-import "strconv"
+import (
+	"io/ioutil"
+	"strconv"
+	"strings"
+)
 
 func MapStringsToInts(stringArray []string) []int {
 	numArray := make([]int, len(stringArray))
@@ -12,4 +16,13 @@ func MapStringsToInts(stringArray []string) []int {
 		numArray[i] = num
 	}
 	return numArray
+}
+
+func LoadFile(filename string) []string {
+	fileBytes, err := ioutil.ReadFile(filename)
+	if err != nil {
+		panic(err)
+	}
+	fileString := string(fileBytes[:])
+	return strings.Split(fileString, "\n")
 }
