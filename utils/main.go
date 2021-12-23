@@ -6,13 +6,18 @@ import (
 	"strings"
 )
 
+func StringToInt(value string) int {
+	num, err := strconv.Atoi(value)
+	if err != nil {
+		panic(err)
+	}
+	return num
+}
+
 func MapStringsToInts(stringArray []string) []int {
 	numArray := make([]int, len(stringArray))
 	for i := range stringArray {
-		num, err := strconv.Atoi(stringArray[i])
-		if err != nil {
-			panic(err)
-		}
+		num := StringToInt(stringArray[i])
 		numArray[i] = num
 	}
 	return numArray
