@@ -23,6 +23,15 @@ func MapStringsToInts(stringArray []string) []int {
 	return numArray
 }
 
+func SumAll(numbers []int) int {
+	total := 0
+	for i := range numbers {
+		num := numbers[i]
+		total += num
+	}
+	return total
+}
+
 func LoadFile(filename string) []string {
 	fileBytes, err := ioutil.ReadFile(filename)
 	if err != nil {
