@@ -42,6 +42,17 @@ func ParseBingoData(data []string) bingoData {
 	return result
 }
 
+func filter(cards *[]bingoCard.BingoCard, cardToFilter *bingoCard.BingoCard) []bingoCard.BingoCard {
+	filteredCards := make([]bingoCard.BingoCard, 0)
+	for i := range *cards {
+		currentCard := &(*cards)[i]
+		if currentCard != cardToFilter {
+			filteredCards = append(filteredCards, *currentCard)
+		}
+	}
+	return filteredCards
+}
+
 func Run() {
 	// data := utils.LoadFile("./day_04_1/testData.txt")
 	data := utils.LoadFile("./day_04_1/input.txt")
@@ -50,27 +61,51 @@ func Run() {
 
 	fmt.Printf("Bingo data!!! \n%v\n", bingoData)
 
-	lastDrawn := -1
-	var winningCard bingoCard.BingoCard
+	winningDraws := make([]int, 0)
+	winningCards := make([]bingoCard.BingoCard, 0)
+
+	remainingCards := bingoData.Cards
+
 	for drawIndex := range bingoData.Draws {
 		draw := bingoData.Draws[drawIndex]
-		for cardIndex := range bingoData.Cards {
-			card := &bingoData.Cards[cardIndex]
-			fmt.Println("Drawn number:", draw)
+		tempRemainingCards := make([]bingoCard.BingoCard, 0)
+		fmt.Println("Drawn number:", draw)
+		for cardIndex := range remainingCards {
+			card := &remainingCards[cardIndex]
 			card.Draw(draw)
 			fmt.Printf("Card: \n%v\n", *card)
 			if card.HasWon() {
-				lastDrawn = draw
-				winningCard = *card
-				score := winningCard.Score(lastDrawn)
-
-				fmt.Printf("Last drawn number: %d\n", lastDrawn)
-				fmt.Printf("Winning card: \n%v\n", winningCard)
-				fmt.Printf("Score: %d\n", score)
-				return
+				winningDraws = append(winningDraws, draw)
+				winningCards = append(winningCards, *card)
+			} else {
+				// Keep checking non-winning cards in later draws
+				tempRemainingCards = append(tempRemainingCards, *card)
 			}
 		}
+		remainingCards = tempRemainingCards
 	}
 
-	panic("Failed to find winning card")
+	if len(winningCards) == 0 {
+		panic("Failed to find winning card")
+	}
+
+	firstWinDraw := winningDraws[0]
+	firstWinCard := winningCards[0]
+
+	score := firstWinCard.Score(firstWinDraw)
+
+	fmt.Println("=== First winning card ===")
+	fmt.Printf("Last drawn number: %d\n", firstWinDraw)
+	fmt.Printf("Winning card: \n%v\n", firstWinCard)
+	fmt.Printf("Score: %d\n", score)
+
+	lastWinDraw := winningDraws[len(winningDraws)-1]
+	lastWinCard := winningCards[len(winningCards)-1]
+	lastWinScore := lastWinCard.Score(lastWinDraw)
+
+	fmt.Println("=== Last winning card ===")
+	fmt.Printf("Last drawn number: %d\n", lastWinDraw)
+	fmt.Printf("Winning card: \n%v\n", lastWinCard)
+	fmt.Printf("Score: %d\n", lastWinScore)
+	return
 }
