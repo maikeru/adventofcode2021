@@ -24,12 +24,12 @@ func StringToLine(entry string) lines.Line {
 	return lines.New(start, end)
 }
 
-func StringsToLines(entries []string) []lines.Line {
+func StringsToLines(entries []string, filterDiagonals bool) []lines.Line {
 	lines := make([]lines.Line, 0)
 	for i := range entries {
 		entry := entries[i]
 		line := StringToLine(entry)
-		if !line.IsDiagonal() {
+		if !line.IsDiagonal() || !filterDiagonals {
 			lines = append(lines, line)
 		}
 	}
@@ -45,9 +45,9 @@ func GetOverlapCount(lines []lines.Line) int {
 }
 
 func Run() {
-	data := utils.LoadFile("./day_05_1/testInput.txt")
-	// data := utils.LoadFile("./day_05_1/input.txt")
-	lines := StringsToLines(data)
+	// data := utils.LoadFile("./day_05_1/testInput.txt")
+	data := utils.LoadFile("./day_05_1/input.txt")
+	lines := StringsToLines(data, false)
 	overlapCount := GetOverlapCount(lines)
 	fmt.Println("Overlap count:", overlapCount)
 }

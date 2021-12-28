@@ -9,11 +9,21 @@ import (
 	"github.com/maikeru/adventofcode2021/utils"
 )
 
-func TestGetOverlappingLineCount(t *testing.T) {
+func TestGetOverlappingLineCountWithoutDiagonals(t *testing.T) {
 	data := utils.LoadFile("./testInput.txt")
-	lines := day051.StringsToLines(data)
+	lines := day051.StringsToLines(data, true)
 	count := day051.GetOverlapCount(lines)
 	expectedCount := 5
+	if count != expectedCount {
+		t.Errorf("Incorrect count! Got %d but expected %d", count, expectedCount)
+	}
+}
+
+func TestGetOverlappingLineCountWithDiagonals(t *testing.T) {
+	data := utils.LoadFile("./testInput.txt")
+	lines := day051.StringsToLines(data, false)
+	count := day051.GetOverlapCount(lines)
+	expectedCount := 12
 	if count != expectedCount {
 		t.Errorf("Incorrect count! Got %d but expected %d", count, expectedCount)
 	}
