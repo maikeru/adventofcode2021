@@ -40,3 +40,10 @@ func LoadFile(filename string) []string {
 	fileString := string(fileBytes[:])
 	return strings.Split(fileString, "\n")
 }
+
+func Abs(num int) int {
+	if num < 0 {
+		return -num
+	}
+	return num
+}
