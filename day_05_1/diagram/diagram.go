@@ -17,11 +17,9 @@ func (diagram *Diagram) GetOverlapCount() int {
 	for i := range diagram.lines {
 		line := diagram.lines[i]
 		linePoints := line.GetPoints()
-		// fmt.Println("line start:", line.Start, "end:", line.End, "linePoints: ", linePoints)
 		for j := range linePoints {
 			linePoint := linePoints[j]
 			value := allPoints[linePoint.String()]
-			// fmt.Println("linePoint", linePoint, "value:", value+1)
 			allPoints[linePoint.String()] = value + 1
 		}
 	}
@@ -33,11 +31,5 @@ func (diagram *Diagram) GetOverlapCount() int {
 		}
 	}
 
-	// debugAllPoints, err := json.Marshal(allPoints)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// println("allPoints", string(debugAllPoints))
-	// println("length allPoints", len(allPoints))
 	return overlapCount
 }
