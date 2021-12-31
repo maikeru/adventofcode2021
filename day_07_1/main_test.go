@@ -15,3 +15,13 @@ func TestGetFuelUsedForOptimumPositionPart1(t *testing.T) {
 		t.Errorf("Incorrect fuel used! Expected %d but got %d", expectedFuel, actualFuel)
 	}
 }
+
+func TestGetFuelUsedForOptimumPositionPart2(t *testing.T) {
+	startPositions := []int{16, 1, 2, 0, 4, 2, 7, 1, 2, 14}
+	expectedFuel := 168
+	actualFuel := day_07_1.GetFuelUsedForOptimumPositionPart2(startPositions)
+
+	if expectedFuel != actualFuel {
+		t.Errorf("Incorrect fuel used! Expected %d but got %d", expectedFuel, actualFuel)
+	}
+}

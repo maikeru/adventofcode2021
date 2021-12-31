@@ -27,6 +27,19 @@ func getOptimumPosition(positionToFuel map[int]int) int {
 	return currentPos
 }
 
+func getFurthestPosition(positions []int) int {
+	currentPosition := 0
+	for i := range positions {
+		position := positions[i]
+		if position > currentPosition {
+			currentPosition = position
+		}
+	}
+	return currentPosition
+}
+
+type fuelCalculator func([]int, int) int
+
 func calculateFuelForPosition(startPositions []int, targetPosition int) int {
 	total := 0
 	for i := range startPositions {
@@ -36,17 +49,42 @@ func calculateFuelForPosition(startPositions []int, targetPosition int) int {
 	return total
 }
 
-func GetFuelUsedForOptimumPositionPart1(startPositions []int) int {
-	positionToFuel := make(map[int]int)
+func calculateFuelForSteps(steps int) int {
+	return steps * (steps + 1) / 2
+}
+
+func calculateFuelForPositionPart2(startPositions []int, targetPosition int) int {
+	total := 0
 	for i := range startPositions {
-		position := startPositions[i]
-		fuel := calculateFuelForPosition(startPositions, position)
+		startPosition := startPositions[i]
+		distance := utils.Abs(targetPosition - startPosition)
+		fuel := calculateFuelForSteps(distance)
+		total += fuel
+	}
+	return total
+}
+
+func GetFuelUsedForOptimumPosition(startPositions []int, calculator fuelCalculator) int {
+	positionToFuel := make(map[int]int)
+
+	furthestPosition := getFurthestPosition(startPositions)
+	for position := 0; position <= furthestPosition; position++ {
+		fuel := calculator(startPositions, position)
 		positionToFuel[position] = fuel
 	}
 
+	fmt.Println("position to fuel:", positionToFuel)
 	optimumPosition := getOptimumPosition(positionToFuel)
 
 	return positionToFuel[optimumPosition]
+}
+
+func GetFuelUsedForOptimumPositionPart1(startPositions []int) int {
+	return GetFuelUsedForOptimumPosition(startPositions, calculateFuelForPosition)
+}
+
+func GetFuelUsedForOptimumPositionPart2(startPositions []int) int {
+	return GetFuelUsedForOptimumPosition(startPositions, calculateFuelForPositionPart2)
 }
 
 func Run() {
@@ -55,4 +93,6 @@ func Run() {
 	startPositions := utils.MapStringsToInts(strings.Split(data[0], ","))
 	fuel := GetFuelUsedForOptimumPositionPart1(startPositions)
 	fmt.Println("Optimum fuel (part1):", fuel)
+	part2Fuel := GetFuelUsedForOptimumPositionPart2(startPositions)
+	fmt.Println("Optimum fuel (part2):", part2Fuel)
 }
